@@ -5,27 +5,27 @@ import java.util.List;
 
 public interface IProductReviewService {
 
-    ProductReviewDto getProductReviewById(int reviewId);
+    ProductReviewDto getProductReviewById(Integer reviewId);
 
     List<ProductReviewDto> getAllProductReviews();
 
-    List<ProductReviewDto> getProductReviewsByProductId(int productId);
+    List<ProductReviewDto> getProductReviewsByProductId(Integer productId);
 
-    List<ProductReviewDto> getProductReviewsByCustomerId(int customerId);
+    List<ProductReviewDto> getProductReviewsByCustomerId(Integer customerId);
 
-    ProductReviewDto getProductReviewByCustomerIdAndProductId(int productId, int customerId);
+    ProductReviewDto getProductReviewByCustomerIdAndProductId(Integer productId, Integer customerId);
 
     Object addProductReview(ProductReviewDto productReviewDto);
 
     Object updateProductReview(ProductReviewDto productReviewDto);
 
-    boolean deleteProductReviewById(int reviewId);
+    boolean deleteProductReviewById(Integer reviewId);
 
-    void deleteProductReviewsByProductId(int productId);
+    void deleteProductReviewsByProductId(Integer productId);
 
-    void deleteProductReviewsByCustomerId(int customerId);
+    void deleteProductReviewsByCustomerId(Integer customerId);
 
-    boolean deleteProductReviewByProductIdAndCustomerId(int productId, int customerId);
+    boolean deleteProductReviewByProductIdAndCustomerId(Integer productId, Integer customerId);
 
-    boolean isProductReviewExists(int reviewId);
+    boolean isProductReviewExists(Integer reviewId);
 }

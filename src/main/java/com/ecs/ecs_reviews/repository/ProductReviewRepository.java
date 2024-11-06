@@ -2,22 +2,27 @@ package com.ecs.ecs_reviews.repository;
 
 import com.ecs.ecs_reviews.entity.ProductReview;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
 public interface ProductReviewRepository extends JpaRepository<ProductReview, Integer> {
 
-    List<ProductReview> findAllByProductId(int productId);
+    List<ProductReview> findAllByProductId(Integer productId);
 
-    List<ProductReview> findAllByCustomerId(int customerId);
+    List<ProductReview> findAllByCustomerId(Integer customerId);
 
-    Optional<ProductReview> findByProductIdAndCustomerId(int productId, int customerId);
+    Optional<ProductReview> findByProductIdAndCustomerId(Integer productId, Integer customerId);
 
-    boolean existsByProductIdAndCustomerId(int productId, int customerId);
+    boolean existsByProductIdAndCustomerId(Integer productId, Integer customerId);
 
-    void deleteByProductIdAndCustomerId(int productId, int customerId);
+    @Transactional
+    void deleteByProductIdAndCustomerId(Integer productId, Integer customerId);
 
-    void deleteByProductId(int productId);
+    @Transactional
+    void deleteByProductId(Integer productId);
 
-    void deleteByCustomerId(int customerId);
+    @Transactional
+    void deleteByCustomerId(Integer customerId);
 }

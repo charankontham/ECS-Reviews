@@ -18,7 +18,7 @@ public class ProductReviewController {
     private IProductReviewService productReviewService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductReviewDto> getProductReviewById(@PathVariable("id") int reviewId) {
+    public ResponseEntity<ProductReviewDto> getProductReviewById(@PathVariable("id") Integer reviewId) {
         ProductReviewDto productReviewDto = productReviewService.getProductReviewById(reviewId);
         return ResponseEntity.ok(productReviewDto);
     }
@@ -30,19 +30,19 @@ public class ProductReviewController {
     }
 
     @GetMapping("/getReviewsByProductId/{id}")
-    public ResponseEntity<List<ProductReviewDto>> getProductReviewsByProductId(@PathVariable("id") int productId) {
+    public ResponseEntity<List<ProductReviewDto>> getProductReviewsByProductId(@PathVariable("id") Integer productId) {
         List<ProductReviewDto> reviews = productReviewService.getProductReviewsByProductId(productId);
         return ResponseEntity.ok(reviews);
     }
 
     @GetMapping("/getReviewsByCustomerId/{id}")
-    public ResponseEntity<List<ProductReviewDto>> getProductReviewsByCustomerId(@PathVariable("id") int customerId) {
+    public ResponseEntity<List<ProductReviewDto>> getProductReviewsByCustomerId(@PathVariable("id") Integer customerId) {
         List<ProductReviewDto> reviews = productReviewService.getProductReviewsByCustomerId(customerId);
         return ResponseEntity.ok(reviews);
     }
 
     @GetMapping("/getReviewByProductIdAndCustomerId/{productId}/{customerId}")
-    public ResponseEntity<ProductReviewDto> getProductReviewByProductIdAndCustomerId(@PathVariable("productId") int productId, @PathVariable("customerId") int customerId) {
+    public ResponseEntity<ProductReviewDto> getProductReviewByProductIdAndCustomerId(@PathVariable("productId") Integer productId, @PathVariable("customerId") int customerId) {
         ProductReviewDto productReviewDto = productReviewService.getProductReviewByCustomerIdAndProductId(productId, customerId);
         return ResponseEntity.ok(productReviewDto);
     }
@@ -64,7 +64,7 @@ public class ProductReviewController {
     }
 
     @DeleteMapping("/deleteByProductIdAndCustomerId/{productId}/{customerId}")
-    public ResponseEntity<String> deleteProductReviewByProductIdAndCustomerId(@PathVariable("productId") int productId, @PathVariable("customerId") int customerId) {
+    public ResponseEntity<String> deleteProductReviewByProductIdAndCustomerId(@PathVariable("productId") Integer productId, @PathVariable("customerId") Integer customerId) {
         boolean isDeleted = productReviewService.deleteProductReviewByProductIdAndCustomerId(productId, customerId);
         if(isDeleted){
             return new ResponseEntity<>("ProductReview Deleted Successfully!", HttpStatus.OK);
@@ -73,7 +73,7 @@ public class ProductReviewController {
     }
 
     @DeleteMapping("/deleteByCustomerId/{customerId}")
-    public ResponseEntity<String> deleteProductReviewByCustomerId(@PathVariable("customerId") int customerId) {
+    public ResponseEntity<String> deleteProductReviewByCustomerId(@PathVariable("customerId") Integer customerId) {
         productReviewService.deleteProductReviewsByCustomerId(customerId);
         return new ResponseEntity<>("success",HttpStatus.OK);
     }

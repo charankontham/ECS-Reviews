@@ -28,5 +28,5 @@ public class ProductReview {
     private String productReview;
 
     @Column(name = "product_rating")
-    private float productRating;
+    private Float productRating;
 }

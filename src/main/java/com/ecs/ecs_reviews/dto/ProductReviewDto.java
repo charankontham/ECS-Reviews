@@ -14,5 +14,5 @@ public class ProductReviewDto {
     private Integer productId;
     private Integer customerId;
     private String productReview;
-    private float productRating;
+    private Float productRating;
 }

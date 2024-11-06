@@ -1,6 +1,7 @@
 package com.ecs.ecs_reviews.util;
 
 import com.ecs.ecs_reviews.dto.*;
+import com.ecs.ecs_reviews.feign.OrderService;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,10 +10,12 @@ import java.util.*;
 @Setter
 public class HelperFunctions {
 
-    public static boolean isOrderExistsByProductId(int productId, List<OrderFinalDto> orders) {
-        return !orders.stream().
-                filter((order) -> isProductExistsByProductId(productId, order.getProducts())).
-                toList().isEmpty();
+    public static boolean isOrderExistsByProductId(int productId, OrderService orderService) {
+        return Objects.requireNonNull(orderService.getOrderItemsByProductId(productId).getBody())
+                .stream().anyMatch(orderItem -> orderItem.getProductId() == productId);
+//        return !orders.stream().
+//                filter((order) -> isProductExistsByProductId(productId, order.getProducts())).
+//                toList().isEmpty();
     }
 
     public static boolean isProductExistsByProductId(int productId, List<ProductFinalDto> products) {

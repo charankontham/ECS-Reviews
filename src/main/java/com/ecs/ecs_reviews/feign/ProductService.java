@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient("ECS-PRODUCT")
+@FeignClient(name="ECS-PRODUCT", configuration = FeignClientConfig.class)
 public interface ProductService {
     @GetMapping("/api/product/{id}")
     ResponseEntity<ProductFinalDto> getProductById(@PathVariable("id") int productId);

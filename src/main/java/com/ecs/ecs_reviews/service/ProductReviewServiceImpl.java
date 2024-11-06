@@ -17,12 +17,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class ProductReviewServiceImpl implements IProductReviewService {
 
     @Autowired
@@ -35,7 +35,7 @@ public class ProductReviewServiceImpl implements IProductReviewService {
     private ProductService productService;
 
     @Override
-    public ProductReviewDto getProductReviewById(int reviewId) {
+    public ProductReviewDto getProductReviewById(Integer reviewId) {
         ProductReview productReview = productReviewRepository.findById(reviewId).
                 orElseThrow(() -> new ResourceNotFoundException("ProductReview Not Found!"));
         return ProductReviewMapper.mapToProductReviewDto(productReview);
@@ -48,19 +48,19 @@ public class ProductReviewServiceImpl implements IProductReviewService {
     }
 
     @Override
-    public List<ProductReviewDto> getProductReviewsByProductId(int productId) {
+    public List<ProductReviewDto> getProductReviewsByProductId(Integer productId) {
         List<ProductReview> productReviews = productReviewRepository.findAllByProductId(productId);
         return productReviews.stream().map(ProductReviewMapper::mapToProductReviewDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ProductReviewDto> getProductReviewsByCustomerId(int customerId) {
+    public List<ProductReviewDto> getProductReviewsByCustomerId(Integer customerId) {
         List<ProductReview> productReviews = productReviewRepository.findAllByCustomerId(customerId);
         return productReviews.stream().map(ProductReviewMapper::mapToProductReviewDto).collect(Collectors.toList());
     }
 
     @Override
-    public ProductReviewDto getProductReviewByCustomerIdAndProductId(int productId, int customerId) {
+    public ProductReviewDto getProductReviewByCustomerIdAndProductId(Integer productId, Integer customerId) {
         ProductReview productReview = productReviewRepository.
                 findByProductIdAndCustomerId(productId, customerId).
                 orElseThrow(() -> new ResourceNotFoundException("ProductReview Not Found!"));
@@ -71,7 +71,7 @@ public class ProductReviewServiceImpl implements IProductReviewService {
     public Object addProductReview(ProductReviewDto productReviewDto) {
         boolean productReviewIdExists = Objects.nonNull(productReviewDto.getReviewId());
         if (productReviewIdExists) {
-            if(productReviewRepository.existsById(productReviewDto.getReviewId())){
+            if (productReviewRepository.existsById(productReviewDto.getReviewId())) {
                 return HttpStatus.CONFLICT;
             }
         }
@@ -79,7 +79,7 @@ public class ProductReviewServiceImpl implements IProductReviewService {
             return validateAndSaveProductReview(productReviewDto);
         } catch (DataIntegrityViolationException e) {
             System.out.println("DataIntegrity Exception message : " + e.getMessage());
-            return HttpStatus.BAD_REQUEST;
+            return HttpStatus.CONFLICT;
         }
     }
 
@@ -89,7 +89,7 @@ public class ProductReviewServiceImpl implements IProductReviewService {
         if (productReviewExists) {
             try {
                 return validateAndSaveProductReview(productReviewDto);
-            }catch (DataIntegrityViolationException e) {
+            } catch (DataIntegrityViolationException e) {
                 System.out.println("Exception message : " + e.getMessage());
                 return HttpStatus.CONFLICT;
             }
@@ -98,7 +98,7 @@ public class ProductReviewServiceImpl implements IProductReviewService {
     }
 
     @Override
-    public boolean deleteProductReviewById(int reviewId) {
+    public boolean deleteProductReviewById(Integer reviewId) {
         boolean productReviewExists = productReviewRepository.existsById(reviewId);
         if (productReviewExists) {
             productReviewRepository.deleteById(reviewId);
@@ -108,19 +108,23 @@ public class ProductReviewServiceImpl implements IProductReviewService {
     }
 
     @Override
-    public void deleteProductReviewsByProductId(int productId) {
+    @Transactional
+    public void deleteProductReviewsByProductId(Integer productId) {
         productReviewRepository.deleteByProductId(productId);
     }
 
     @Override
-    public void deleteProductReviewsByCustomerId(int customerId) {
+    @Transactional
+    public void deleteProductReviewsByCustomerId(Integer customerId) {
         productReviewRepository.deleteByCustomerId(customerId);
     }
 
     @Override
-    public boolean deleteProductReviewByProductIdAndCustomerId(int productId, int customerId) {
+    @Transactional
+    public boolean deleteProductReviewByProductIdAndCustomerId(Integer productId, Integer customerId) {
         boolean productReviewExists = productReviewRepository.existsByProductIdAndCustomerId(productId, customerId);
         if (productReviewExists) {
+            System.out.println("Product Review Found");
             productReviewRepository.deleteByProductIdAndCustomerId(productId, customerId);
             return true;
         }
@@ -128,17 +132,15 @@ public class ProductReviewServiceImpl implements IProductReviewService {
     }
 
     @Override
-    public boolean isProductReviewExists(int reviewId) {
+    public boolean isProductReviewExists(Integer reviewId) {
         return productReviewRepository.existsById(reviewId);
     }
 
     private Object validateAndSaveProductReview(ProductReviewDto productReviewDto) throws DataIntegrityViolationException {
-        boolean customerExists = customerService.getCustomerById(productReviewDto.getCustomerId()).getStatusCode()==HttpStatus.OK;
-        boolean productExists = productService.getProductById(productReviewDto.getProductId()).getStatusCode()==HttpStatus.OK;
-        boolean orderExists = HelperFunctions.isOrderExistsByProductId(
-                productReviewDto.getProductId(),
-                Objects.requireNonNull(orderService.getAllOrdersByCustomerId(productReviewDto.getCustomerId()).getBody())
-        );
+        boolean customerExists = customerService.getCustomerById(productReviewDto.getCustomerId()).getStatusCode() == HttpStatus.OK;
+        boolean productExists = productService.getProductById(productReviewDto.getProductId()).getStatusCode() == HttpStatus.OK;
+        boolean orderExists = HelperFunctions
+                .isOrderExistsByProductId(productReviewDto.getProductId(), orderService);
         if (!ProductReviewValidation.validateProductReview(productReviewDto)) {
             return HttpStatus.BAD_REQUEST;
         } else if (!customerExists) {
@@ -148,8 +150,8 @@ public class ProductReviewServiceImpl implements IProductReviewService {
         } else if (!orderExists) {
             return Constants.OrderNotFound;
         } else {
-                ProductReview productReview = productReviewRepository.save(ProductReviewMapper.mapToProductReview(productReviewDto));
-                return ProductReviewMapper.mapToProductReviewDto(productReview);
+            ProductReview productReview = productReviewRepository.save(ProductReviewMapper.mapToProductReview(productReviewDto));
+            return ProductReviewMapper.mapToProductReviewDto(productReview);
         }
     }
 }
