@@ -1,10 +1,10 @@
 package com.ecs.ecs_reviews.service.interfaces;
 
 import com.ecs.ecs_reviews.dto.ProductReviewDto;
+
 import java.util.List;
 
 public interface IProductReviewService {
-
     ProductReviewDto getProductReviewById(Integer reviewId);
 
     List<ProductReviewDto> getAllProductReviews();

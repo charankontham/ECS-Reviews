@@ -4,7 +4,6 @@ import com.ecs.ecs_reviews.dto.ProductReviewDto;
 import com.ecs.ecs_reviews.entity.ProductReview;
 
 public class ProductReviewMapper {
-
     public static ProductReview mapToProductReview(ProductReviewDto productReviewDto) {
         return new ProductReview(
                 productReviewDto.getReviewId(),

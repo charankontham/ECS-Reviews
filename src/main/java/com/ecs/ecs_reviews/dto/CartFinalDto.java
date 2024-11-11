@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartFinalDto {
-    private int cartId;
+    private Integer cartId;
     private CustomerDto customer;
     private List<ProductFinalDto> products;
 }

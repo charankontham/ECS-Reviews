@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductReviewServiceImpl implements IProductReviewService {
-
     @Autowired
     private ProductReviewRepository productReviewRepository;
     @Autowired
@@ -37,7 +36,7 @@ public class ProductReviewServiceImpl implements IProductReviewService {
     @Override
     public ProductReviewDto getProductReviewById(Integer reviewId) {
         ProductReview productReview = productReviewRepository.findById(reviewId).
-                orElseThrow(() -> new ResourceNotFoundException("ProductReview Not Found!"));
+                orElseThrow(() -> new ResourceNotFoundException("Product review not found!"));
         return ProductReviewMapper.mapToProductReviewDto(productReview);
     }
 
@@ -63,7 +62,7 @@ public class ProductReviewServiceImpl implements IProductReviewService {
     public ProductReviewDto getProductReviewByCustomerIdAndProductId(Integer productId, Integer customerId) {
         ProductReview productReview = productReviewRepository.
                 findByProductIdAndCustomerId(productId, customerId).
-                orElseThrow(() -> new ResourceNotFoundException("ProductReview Not Found!"));
+                orElseThrow(() -> new ResourceNotFoundException("Product review not found!"));
         return ProductReviewMapper.mapToProductReviewDto(productReview);
     }
 
@@ -78,7 +77,6 @@ public class ProductReviewServiceImpl implements IProductReviewService {
         try {
             return validateAndSaveProductReview(productReviewDto);
         } catch (DataIntegrityViolationException e) {
-            System.out.println("DataIntegrity Exception message : " + e.getMessage());
             return HttpStatus.CONFLICT;
         }
     }
@@ -90,7 +88,6 @@ public class ProductReviewServiceImpl implements IProductReviewService {
             try {
                 return validateAndSaveProductReview(productReviewDto);
             } catch (DataIntegrityViolationException e) {
-                System.out.println("Exception message : " + e.getMessage());
                 return HttpStatus.CONFLICT;
             }
         }
@@ -136,9 +133,12 @@ public class ProductReviewServiceImpl implements IProductReviewService {
         return productReviewRepository.existsById(reviewId);
     }
 
-    private Object validateAndSaveProductReview(ProductReviewDto productReviewDto) throws DataIntegrityViolationException {
-        boolean customerExists = customerService.getCustomerById(productReviewDto.getCustomerId()).getStatusCode() == HttpStatus.OK;
-        boolean productExists = productService.getProductById(productReviewDto.getProductId()).getStatusCode() == HttpStatus.OK;
+    private Object validateAndSaveProductReview(ProductReviewDto productReviewDto)
+            throws DataIntegrityViolationException {
+        boolean customerExists = customerService
+                .getCustomerById(productReviewDto.getCustomerId()).getStatusCode() == HttpStatus.OK;
+        boolean productExists = productService
+                .getProductById(productReviewDto.getProductId()).getStatusCode() == HttpStatus.OK;
         boolean orderExists = HelperFunctions
                 .isOrderExistsByProductId(productReviewDto.getProductId(), orderService);
         if (!ProductReviewValidation.validateProductReview(productReviewDto)) {
@@ -150,7 +150,8 @@ public class ProductReviewServiceImpl implements IProductReviewService {
         } else if (!orderExists) {
             return Constants.OrderNotFound;
         } else {
-            ProductReview productReview = productReviewRepository.save(ProductReviewMapper.mapToProductReview(productReviewDto));
+            ProductReview productReview = productReviewRepository
+                    .save(ProductReviewMapper.mapToProductReview(productReviewDto));
             return ProductReviewMapper.mapToProductReviewDto(productReview);
         }
     }

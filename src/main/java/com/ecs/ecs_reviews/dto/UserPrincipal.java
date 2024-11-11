@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class UserPrincipal implements UserDetails {
-
     private final UserDto userDto;
 
     public UserPrincipal(UserDto userDto) {

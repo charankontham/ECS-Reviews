@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/productReview")
 public class ProductReviewController {
-
     @Autowired
     private IProductReviewService productReviewService;
 
@@ -42,8 +41,11 @@ public class ProductReviewController {
     }
 
     @GetMapping("/getReviewByProductIdAndCustomerId/{productId}/{customerId}")
-    public ResponseEntity<ProductReviewDto> getProductReviewByProductIdAndCustomerId(@PathVariable("productId") Integer productId, @PathVariable("customerId") int customerId) {
-        ProductReviewDto productReviewDto = productReviewService.getProductReviewByCustomerIdAndProductId(productId, customerId);
+    public ResponseEntity<ProductReviewDto> getProductReviewByProductIdAndCustomerId(
+            @PathVariable("productId") Integer productId,
+            @PathVariable("customerId") Integer customerId) {
+        ProductReviewDto productReviewDto = productReviewService
+                .getProductReviewByCustomerIdAndProductId(productId, customerId);
         return ResponseEntity.ok(productReviewDto);
     }
 
@@ -51,7 +53,7 @@ public class ProductReviewController {
     public ResponseEntity<?> addProductReview(@RequestBody ProductReviewDto productReviewDto) {
         Object response = productReviewService.addProductReview(productReviewDto);
         ResponseEntity<?> responseEntity = HelperFunctions.getResponseEntity(response);
-        if(responseEntity.getStatusCode().is2xxSuccessful()){
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
         return responseEntity;
@@ -64,18 +66,20 @@ public class ProductReviewController {
     }
 
     @DeleteMapping("/deleteByProductIdAndCustomerId/{productId}/{customerId}")
-    public ResponseEntity<String> deleteProductReviewByProductIdAndCustomerId(@PathVariable("productId") Integer productId, @PathVariable("customerId") Integer customerId) {
+    public ResponseEntity<String> deleteProductReviewByProductIdAndCustomerId(
+            @PathVariable("productId") Integer productId,
+            @PathVariable("customerId") Integer customerId) {
         boolean isDeleted = productReviewService.deleteProductReviewByProductIdAndCustomerId(productId, customerId);
-        if(isDeleted){
-            return new ResponseEntity<>("ProductReview Deleted Successfully!", HttpStatus.OK);
+        if (isDeleted) {
+            return new ResponseEntity<>("Product review deleted successfully!", HttpStatus.OK);
         }
-        return new ResponseEntity<>("ProductReview Not found!", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Product review not found!", HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/deleteByCustomerId/{customerId}")
-    public ResponseEntity<String> deleteProductReviewByCustomerId(@PathVariable("customerId") Integer customerId) {
+    @DeleteMapping("/deleteByCustomerId/{id}")
+    public ResponseEntity<String> deleteProductReviewByCustomerId(@PathVariable("id") Integer customerId) {
         productReviewService.deleteProductReviewsByCustomerId(customerId);
-        return new ResponseEntity<>("success",HttpStatus.OK);
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 }

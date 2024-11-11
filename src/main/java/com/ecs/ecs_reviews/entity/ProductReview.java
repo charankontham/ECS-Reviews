@@ -13,7 +13,6 @@ import lombok.Setter;
 @Getter
 @Table(name = "product_review")
 public class ProductReview {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer reviewId;
