@@ -1,4 +1,4 @@
-package com.ecs.ecs_reviews.feign;
+package com.ecs.ecs_reviews.config;
 
 import feign.RequestInterceptor;
 import jakarta.servlet.http.HttpServletRequest;

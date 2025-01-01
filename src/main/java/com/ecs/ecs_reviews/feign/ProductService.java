@@ -1,5 +1,6 @@
 package com.ecs.ecs_reviews.feign;
 
+import com.ecs.ecs_reviews.config.FeignClientConfig;
 import com.ecs.ecs_reviews.dto.ProductFinalDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
