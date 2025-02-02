@@ -9,8 +9,9 @@ public class ProductReviewMapper {
                 productReviewDto.getReviewId(),
                 productReviewDto.getProductId(),
                 productReviewDto.getCustomerId(),
-                productReviewDto.getProductReview(),
-                productReviewDto.getProductRating()
+                productReviewDto.getProductRating(),
+                productReviewDto.getReviewHeadline(),
+                productReviewDto.getProductReview()
         );
     }
 
@@ -19,8 +20,9 @@ public class ProductReviewMapper {
                 productReview.getReviewId(),
                 productReview.getProductId(),
                 productReview.getCustomerId(),
-                productReview.getProductReview(),
-                productReview.getProductRating()
+                productReview.getProductRating(),
+                productReview.getReviewHeadline(),
+                productReview.getProductReview()
         );
     }
 }

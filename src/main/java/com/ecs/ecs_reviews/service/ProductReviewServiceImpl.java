@@ -88,7 +88,7 @@ public class ProductReviewServiceImpl implements IProductReviewService {
             try {
                 return validateAndSaveProductReview(productReviewDto);
             } catch (DataIntegrityViolationException e) {
-                return HttpStatus.CONFLICT;
+                return HttpStatus.BAD_REQUEST;
             }
         }
         return Constants.ProductReviewNotFound;

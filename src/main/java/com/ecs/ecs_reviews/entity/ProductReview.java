@@ -23,9 +23,13 @@ public class ProductReview {
     @Column(name = "customer_id")
     private Integer customerId;
 
+    @Column(name = "product_rating")
+    private Integer productRating;
+
+    @Column(name = "review_headline")
+    private String reviewHeadline;
+
     @Column(name = "product_review")
     private String productReview;
 
-    @Column(name = "product_rating")
-    private Float productRating;
 }

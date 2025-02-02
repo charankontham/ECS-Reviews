@@ -65,6 +65,15 @@ public class ProductReviewController {
         return HelperFunctions.getResponseEntity(response);
     }
 
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<String> deleteProductReviewByReviewId(@PathVariable("reviewId") Integer reviewId) {
+        boolean isDeleted = productReviewService.deleteProductReviewById(reviewId);
+        if (isDeleted) {
+            return new ResponseEntity<>("Product review deleted successfully!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Product review not found!", HttpStatus.NOT_FOUND);
+    }
+
     @DeleteMapping("/deleteByProductIdAndCustomerId/{productId}/{customerId}")
     public ResponseEntity<String> deleteProductReviewByProductIdAndCustomerId(
             @PathVariable("productId") Integer productId,
