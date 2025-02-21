@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -23,6 +25,9 @@ public class ProductReview {
     @Column(name = "customer_id")
     private Integer customerId;
 
+    @Column(name = "customer_name")
+    private String customerName;
+
     @Column(name = "product_rating")
     private Integer productRating;
 
@@ -31,5 +36,8 @@ public class ProductReview {
 
     @Column(name = "product_review")
     private String productReview;
+
+    @Column(name = "review_date")
+    private LocalDateTime reviewDate;
 
 }
