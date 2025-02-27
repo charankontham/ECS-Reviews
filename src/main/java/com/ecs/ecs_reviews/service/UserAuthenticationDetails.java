@@ -1,8 +1,10 @@
 package com.ecs.ecs_reviews.service;
 
+import com.ecs.ecs_reviews.dto.AdminDto;
 import com.ecs.ecs_reviews.dto.CustomerDto;
 import com.ecs.ecs_reviews.dto.UserPrincipal;
 import com.ecs.ecs_reviews.exception.ResourceNotFoundException;
+import com.ecs.ecs_reviews.feign.AdminService;
 import com.ecs.ecs_reviews.feign.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,13 +21,19 @@ public class UserAuthenticationDetails implements UserDetailsService {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private AdminService adminService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ResponseEntity<CustomerDto> response = customerService.getCustomerByEmail(username);
-        if (Objects.isNull(response.getBody()) || response.getStatusCode() != HttpStatus.OK) {
-            throw new ResourceNotFoundException("Customer not found!");
-        } else {
-            return new UserPrincipal(response.getBody());
+        ResponseEntity<CustomerDto> customerResponse = customerService.getCustomerByEmail(username);
+        ResponseEntity<AdminDto> adminResponse = adminService.getByUsername(username);
+        if (Objects.nonNull(customerResponse.getBody()) || customerResponse.getStatusCode() == HttpStatus.OK) {
+            return new UserPrincipal(customerResponse.getBody());
+        } else if(Objects.nonNull(adminResponse.getBody()) || adminResponse.getStatusCode() == HttpStatus.OK){
+            return new UserPrincipal(adminResponse.getBody());
+        }else{
+            throw new ResourceNotFoundException("User not found");
         }
     }
 }
