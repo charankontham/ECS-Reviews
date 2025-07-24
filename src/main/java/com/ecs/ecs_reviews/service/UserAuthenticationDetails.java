@@ -25,14 +25,18 @@ public class UserAuthenticationDetails implements UserDetailsService {
     private AdminService adminService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ResponseEntity<CustomerDto> customerResponse = customerService.getCustomerByEmail(username);
-        if (Objects.nonNull(customerResponse.getBody()) || customerResponse.getStatusCode() == HttpStatus.OK) {
-            return new UserPrincipal(customerResponse.getBody());
-        }
-        ResponseEntity<AdminDto> adminResponse = adminService.getByUsername(username);
-        if(Objects.nonNull(adminResponse.getBody()) || adminResponse.getStatusCode() == HttpStatus.OK){
-            return new UserPrincipal(adminResponse.getBody());
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, ResourceNotFoundException {
+        try {
+            ResponseEntity<CustomerDto> customerResponse = customerService.getCustomerByEmail(username);
+            if (Objects.nonNull(customerResponse.getBody()) || customerResponse.getStatusCode() == HttpStatus.OK) {
+                return new UserPrincipal(customerResponse.getBody());
+            }
+        }catch(Exception e) {
+            System.out.println(e);
+            ResponseEntity<AdminDto> adminResponse = adminService.getByUsername(username);
+            if(Objects.nonNull(adminResponse.getBody()) || adminResponse.getStatusCode() == HttpStatus.OK){
+                return new UserPrincipal(adminResponse.getBody());
+            }
         }
         throw new ResourceNotFoundException("User not found");
     }

@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AddressDto {
     private Integer addressId;
-    private Integer customerId;
+    private String userId;
     private String street;
     private String city;
     private String state;
