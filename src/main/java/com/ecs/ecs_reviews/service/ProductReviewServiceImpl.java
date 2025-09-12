@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -150,6 +152,7 @@ public class ProductReviewServiceImpl implements IProductReviewService {
         } else if (!orderExists) {
             return Constants.OrderNotFound;
         } else {
+            productReviewDto.setReviewDate(LocalDateTime.now(ZoneId.of("UTC")));
             ProductReview productReview = productReviewRepository
                     .save(ProductReviewMapper.mapToProductReview(productReviewDto));
             return ProductReviewMapper.mapToProductReviewDto(productReview);
